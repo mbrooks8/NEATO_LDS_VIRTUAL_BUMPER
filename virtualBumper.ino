@@ -1,5 +1,5 @@
-float distance = 15;
-float distanceFromCenterOfRotationTolazer = 2.5;
+const int distance = 10;
+const float distanceFromCenterOfRotationTolazer = 2.5;
 
 
 // Libraries
@@ -8,14 +8,13 @@ float distanceFromCenterOfRotationTolazer = 2.5;
 // which allows commercial use.
 // Other versions of these libraries are licensed under GPL v2.
 // The versions used here also contain performance optimizations.
-#include <TimerOne.h>
-#include <TimerThree.h>
+//#include <TimerOne.h>
+//#include <TimerThree.h>
 #include <Adafruit_NeoPixel.h>
 const float pi = 3.14159;
-int oddNodes;
 
 #define PIN 6
-int ledNum;
+short ledNum;
 
 // LDS receive buffer
 #define RXBUFF_SZ 22
@@ -99,10 +98,10 @@ void setup() {
   // Initialize 16 bit counters for driving LEDs.
   // The timers run one cycle per degree, so the timer completes 360
   // cycles in one revolution of the LDS.
-  Timer1.initialize(ONE_DEGREE); // Set period.
-  Timer3.initialize(ONE_DEGREE);
-  Timer1.start(); // Start up the timers.
-  Timer3.start();
+  //  Timer1.initialize(ONE_DEGREE); // Set period.
+  //  Timer3.initialize(ONE_DEGREE);
+  //  Timer1.start(); // Start up the timers.
+  //  Timer3.start();
 }
 
 // Compute checksum over receive buffer. Returns 'true' if packet is valid.
@@ -318,8 +317,9 @@ void swapbuffers() {
 
 int d;
 int a;
-float  x, y, x2, y2;
+short  x, y, x2, y2;
 float pi180 = (pi / 180);
+float tempa, tempsin, tempcos;
 void loop() {
 
   getpacket();
@@ -328,23 +328,25 @@ void loop() {
     swapbuffers();
     //      Serial.println(bright2pwm[*(led0)]);
   }
+
   a = (359 + angle() - 8) % 359;
   for (int i = 0; i < 4; ++i, ++a) {
     d = dist(i);
-    float tempa;
-    tempa = a - 0.550920957;
+
+     tempa = a + distanceFromCenterOfRotationTolazer / d;
 
     //everyting needs to be offset by 8 degrees
     x = d * cos(tempa * pi180);
     y = d * sin(tempa * pi180);
+    // tempsin = sin((a - 8) * (pi / 180));
+    // tempcos = cos((a - 8) * (pi / 180));
+    // x2 = tempcos * x - tempsin * y;
+    // y2 = tempsin * x + tempcos * y;
+    // x = x2;
+    // y = y2;
 
-    //matrix to rotate everything by 8 a * (pi / 180)reees.
-
-    // x2 = cos((a + 4) * (pi / 180)) * x - sin((a + 4) * (pi / 180)) * y;
-    //y2 = sin((a + 4) * (pi / 180)) * x + cos((a + 4) * (pi / 180)) * y;
-
-    if (y >= -168 - distance - distance && y <= 168 + distance) {
-      if (x >= 160 && x <= 250 + distance) {
+    if (y >= -168 - distance * 3 && y <= 168 + distance * 3) {
+      if (x >= 230 && x <=  -1 / 902 * y + 250 + distance) {
         if (a > 6 && a < 25) {
           /*Left front bumper*/
           Serial.print("front left");
@@ -363,12 +365,11 @@ void loop() {
           Serial.println();
           Serial.println();
           digitalWrite(lf, HIGH);   // sets the bumper to be pressed
-          eyeMove(a + 100, 10);
+          delay(10);
           digitalWrite(lf, LOW);   // sets the bumper to not pressed
         } else if ( a > 34 && a <= 90 ) {
           /*Side left bumper*/
           Serial.print("side left");
-
           Serial.println();
           Serial.print("angle: ");
           Serial.print(a);
@@ -384,7 +385,7 @@ void loop() {
           Serial.println();
           Serial.println();
           digitalWrite(ls, HIGH);   // sets the bumper to be pressed
-          eyeMove(a + 100, 10);
+          delay(10);
           digitalWrite(ls, LOW);   // sets the bumper to not pressed
         } else if (a > 326 && a < 354) {
           Serial.print("front right");
@@ -405,7 +406,7 @@ void loop() {
           Serial.println();
           /*right front bumper*/
           digitalWrite(rf, HIGH);   // sets the bumper to be pressed
-          eyeMove(a + 100, 10);
+          delay(10);
           digitalWrite(rf, LOW);   // sets the bumper to not pressed
         } else if (a >= 270 && a < 318) {
           /*right side bumper*/
@@ -426,7 +427,7 @@ void loop() {
           Serial.println();
           Serial.println();
           digitalWrite(rs, HIGH);   // sets the bumper to be pressed
-          eyeMove(a + 100, 10);
+          delay(10);
           digitalWrite(rs, LOW);   // sets the bumper to not pressed
         }
         else if (a >= 354 || a <= 6) {
@@ -447,14 +448,14 @@ void loop() {
           Serial.println();
           Serial.println();
           digitalWrite(rf, HIGH);   // sets the bumper to be pressed
-          delay(10);
+          delay(100);
           digitalWrite(lf, HIGH);   // sets the bumper to be pressed
-          delay(10);
+          delay(100);
           digitalWrite(rf, LOW);   // sets the bumper to not pressed
           delay(10);
           digitalWrite(lf, LOW);   // sets the bumper to not pressed
 
-          eyeMove(a + 100, 10);
+          delay(10);
 
         }
         else if (a >= 25 && a <= 34) {
@@ -482,7 +483,7 @@ void loop() {
           delay(10);
           digitalWrite(ls, LOW);   // sets the bumper to not pressed
 
-          eyeMove(a + 100, 10);
+          delay(10);
         }
         else if (a >= 318 && a <= 326) {
           /*right corner bumpers*/
@@ -508,7 +509,7 @@ void loop() {
           digitalWrite(rf, LOW);   // sets the bumper to not pres
           delay(10);
           digitalWrite(rs, LOW);   // sets the bumper to not pressed
-          eyeMove(a + 100, 10);
+          delay(10);
 
 
         }
