@@ -1,4 +1,4 @@
-float distance =  10;
+float distance = 15;
 float distanceFromCenterOfRotationTolazer = 2.5;
 
 
@@ -318,9 +318,8 @@ void swapbuffers() {
 
 int d;
 int a;
-byte bright;
 float  x, y, x2, y2;
-
+float pi180 = (pi / 180);
 void loop() {
 
   getpacket();
@@ -332,25 +331,20 @@ void loop() {
   a = (359 + angle() - 8) % 359;
   for (int i = 0; i < 4; ++i, ++a) {
     d = dist(i);
+    float tempa;
+    tempa = a - 0.550920957;
+
     //everyting needs to be offset by 8 degrees
-    x = d * sin(a * (pi / 180));
-    y = d * cos(a * (pi / 180));
+    x = d * cos(tempa * pi180);
+    y = d * sin(tempa * pi180);
 
     //matrix to rotate everything by 8 a * (pi / 180)reees.
 
     // x2 = cos((a + 4) * (pi / 180)) * x - sin((a + 4) * (pi / 180)) * y;
     //y2 = sin((a + 4) * (pi / 180)) * x + cos((a + 4) * (pi / 180)) * y;
 
-    //center of robot is 15 degrees
-    //x:60
-    //2.25 -- 1.75 ++
-    //y:226
-
-    //button side is the right
-    // owen the right x is negative ------------
-    //newValue = m*y + b
-    if (y >= ( ((9 / 10) * x) + 160) && y <= ( ((910 / 1000) * x) + 250) + distance) {
-      if (x >= -168 - (distance * 2) && x <= 168 + distance) {
+    if (y >= -168 - distance - distance && y <= 168 + distance) {
+      if (x >= 160 && x <= 250 + distance) {
         if (a > 6 && a < 25) {
           /*Left front bumper*/
           Serial.print("front left");
@@ -371,10 +365,10 @@ void loop() {
           digitalWrite(lf, HIGH);   // sets the bumper to be pressed
           eyeMove(a + 100, 10);
           digitalWrite(lf, LOW);   // sets the bumper to not pressed
-        } else if ( a > 40 && a <= 90 ) {
+        } else if ( a > 34 && a <= 90 ) {
           /*Side left bumper*/
           Serial.print("side left");
-          Serial.println();
+
           Serial.println();
           Serial.print("angle: ");
           Serial.print(a);
@@ -392,9 +386,9 @@ void loop() {
           digitalWrite(ls, HIGH);   // sets the bumper to be pressed
           eyeMove(a + 100, 10);
           digitalWrite(ls, LOW);   // sets the bumper to not pressed
-        } else if (a > 330 && a < 354) {
+        } else if (a > 326 && a < 354) {
           Serial.print("front right");
-          Serial.println();
+
           Serial.println();
           Serial.print("angle: ");
           Serial.print(a);
@@ -416,7 +410,7 @@ void loop() {
         } else if (a >= 270 && a < 318) {
           /*right side bumper*/
           Serial.print("right side");
-          Serial.println();
+
           Serial.println();
           Serial.print("angle: ");
           Serial.print(a);
@@ -439,7 +433,6 @@ void loop() {
           /*both front bumper*/
           Serial.print("both front");
           Serial.println();
-          Serial.println();
           Serial.print("angle: ");
           Serial.print(a);
           Serial.println();
@@ -464,10 +457,9 @@ void loop() {
           eyeMove(a + 100, 10);
 
         }
-        else if (a >= 25 && a <= 40) {
+        else if (a >= 25 && a <= 34) {
           /*left corner bumpers*/
           Serial.print("corner left");
-          Serial.println();
           Serial.println();
           Serial.print("angle: ");
           Serial.print(a);
@@ -492,7 +484,7 @@ void loop() {
 
           eyeMove(a + 100, 10);
         }
-        else if (a >= 318 && a <= 330) {
+        else if (a >= 318 && a <= 326) {
           /*right corner bumpers*/
           Serial.print("corner right");
           Serial.println();
