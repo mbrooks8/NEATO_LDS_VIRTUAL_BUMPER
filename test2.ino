@@ -91,7 +91,7 @@ void setup() {
   pinMode(lf, OUTPUT);
   pinMode(rf, OUTPUT);
   pinMode(rs, OUTPUT);
-}
+
 // Compute checksum over receive buffer. Returns 'true' if packet is valid.
 bool validpacket() {
   long chk32 = 0;
@@ -307,189 +307,198 @@ void swapbuffers() {
 void loop() {
 
   getpacket();
-  if (validpacket()) {
-    if (index() == 0) {
-      swapbuffers();
-    }
 
-    a = (359 + angle() - 8) % 359;
-    for (int i = 0; i < 4; ++i, ++a) {
-      d = dist(i);
+  if (index() == 0) {
+    swapbuffers();
+    //      Serial.println(bright2pwm[*(led0)]);
+  }
 
-      tempa = a ;
+  a = (359 + angle() - 8) % 359;
+  for (int i = 0; i < 4; ++i, ++a) {
+    d = dist(i);
 
-      //everyting needs to be offset by 8 degrees
-      x = d * cos(tempa * pi180);
-      y = d * sin(tempa * pi180);
+    tempa = a ;
 
-      x2 = tempcos * x - tempsin * y;
-      y2 = tempsin * x + tempcos * y;
-      x = x2;
-      y = y2;
+    //everyting needs to be offset by 8 degrees
+    x = d * cos(tempa * pi180);
+    y = d * sin(tempa * pi180);
 
-      if (y >= ((-1 / x) * 100) + (-168 - distance) && y <= (1 / x) * 100 + (168 + distance)) {
-        if (x >= 145 && x <= 245 + distance) {
-          if (a > 14 && a < 28) {
-            /*Left front bumper*/
-            Serial.print("front left");
-            Serial.println();
-            Serial.print("angle: ");
-            Serial.print(a);
-            Serial.println();
-            Serial.print("distance: ");
-            Serial.print(d);
-            Serial.println();
-            Serial.print("x: ");
-            Serial.print(x);
-            Serial.println();
-            Serial.print("y: ");
-            Serial.print(y);
-            Serial.println();
-            Serial.println();
-            digitalWrite(lf, HIGH);   // sets the bumper to be pressed
-            delay(10);
-            digitalWrite(lf, LOW);   // sets the bumper to not pressed
-          } else if ( a > 32 && a <= 90 ) {
-            /*Side left bumper*/
-            Serial.print("side left");
-            Serial.println();
-            Serial.print("angle: ");
-            Serial.print(a);
-            Serial.println();
-            Serial.print("distance: ");
-            Serial.print(d);
-            Serial.println();
-            Serial.print("x: ");
-            Serial.print(x);
-            Serial.println();
-            Serial.print("y: ");
-            Serial.print(y);
-            Serial.println();
-            Serial.println();
-            digitalWrite(ls, HIGH);   // sets the bumper to be pressed
-            delay(10);
-            digitalWrite(ls, LOW);   // sets the bumper to not pressed
-          } else if (a > 326 && a < 343) {
-            Serial.print("front right");
+    x2 = tempcos * x - tempsin * y;
+    y2 = tempsin * x + tempcos * y;
+    x = x2;
+    y = y2;
 
-            Serial.println();
-            Serial.print("angle: ");
-            Serial.print(a);
-            Serial.println();
-            Serial.print("distance: ");
-            Serial.print(d);
-            Serial.println();
-            Serial.print("x: ");
-            Serial.print(x);
-            Serial.println();
-            Serial.print("y: ");
-            Serial.print(y);
-            Serial.println();
-            Serial.println();
-            /*right front bumper*/
-            digitalWrite(rf, HIGH);   // sets the bumper to be pressed
-            delay(10);
-            digitalWrite(rf, LOW);   // sets the bumper to not pressed
-          } else if (a >= 270 && a < 320) {
-            /*right side bumper*/
-            Serial.print("right side");
+    if (y >= ((-1 / x) * 100) + (-168 - distance) && y <= (1 / x) * 100 + (168 + distance)) {
+      if (x >= 145 && x <= 245 + distance) {
+        if (a > 14 && a < 28) {
+          /*Left front bumper*/
+          Serial.print("front left");
+          Serial.println();
+          Serial.print("angle: ");
+          Serial.print(a);
+          Serial.println();
+          Serial.print("distance: ");
+          Serial.print(d);
+          Serial.println();
+          Serial.print("x: ");
+          Serial.print(x);
+          Serial.println();
+          Serial.print("y: ");
+          Serial.print(y);
+          Serial.println();
+          Serial.println();
+          digitalWrite(lf, HIGH);   // sets the bumper to be pressed
+          delay(10);
+          digitalWrite(lf, LOW);   // sets the bumper to not pressed
+        } else if ( a > 32 && a <= 90 ) {
+          /*Side left bumper*/
+          Serial.print("side left");
+          Serial.println();
+          Serial.print("angle: ");
+          Serial.print(a);
+          Serial.println();
+          Serial.print("distance: ");
+          Serial.print(d);
+          Serial.println();
+          Serial.print("x: ");
+          Serial.print(x);
+          Serial.println();
+          Serial.print("y: ");
+          Serial.print(y);
+          Serial.println();
+          Serial.println();
+          digitalWrite(ls, HIGH);   // sets the bumper to be pressed
+          delay(10);
+          digitalWrite(ls, LOW);   // sets the bumper to not pressed
+        } else if (a > 326 && a < 343) {
+          Serial.print("front right");
 
-            Serial.println();
-            Serial.print("angle: ");
-            Serial.print(a);
-            Serial.println();
-            Serial.print("distance: ");
-            Serial.print(d);
-            Serial.println();
-            Serial.print("x: ");
-            Serial.print(x);
-            Serial.println();
-            Serial.print("y: ");
-            Serial.print(y);
-            Serial.println();
-            Serial.println();
-            digitalWrite(rs, HIGH);   // sets the bumper to be pressed
-            delay(10);
-            digitalWrite(rs, LOW);   // sets the bumper to not pressed
-          }
-          else if (a >= 343 || a <= 14) {
-            /*both front bumper*/
-            Serial.print("both front");
-            Serial.println();
-            Serial.print("angle: ");
-            Serial.print(a);
-            Serial.println();
-            Serial.print("distance: ");
-            Serial.print(d);
-            Serial.println();
-            Serial.print("x: ");
-            Serial.print(x);
-            Serial.println();
-            Serial.print("y: ");
-            Serial.print(y);
-            Serial.println();
-            Serial.println();
-            digitalWrite(rf, HIGH);   // sets the bumper to be pressed
-            delay(10);
-            digitalWrite(lf, HIGH);   // sets the bumper to be pressed
-            delay(10);
-            digitalWrite(rf, LOW);   // sets the bumper to not pressed
-            delay(10);
-            digitalWrite(lf, LOW);   // sets the bumper to not pressed
+          Serial.println();
+          Serial.print("angle: ");
+          Serial.print(a);
+          Serial.println();
+          Serial.print("distance: ");
+          Serial.print(d);
+          Serial.println();
+          Serial.print("x: ");
+          Serial.print(x);
+          Serial.println();
+          Serial.print("y: ");
+          Serial.print(y);
+          Serial.println();
+          Serial.println();
+          /*right front bumper*/
+          digitalWrite(rf, HIGH);   // sets the bumper to be pressed
+          delay(10);
+          digitalWrite(rf, LOW);   // sets the bumper to not pressed
+        } else if (a >= 270 && a < 320) {
+          /*right side bumper*/
+          Serial.print("right side");
 
-          }
-          else if (a >= 28 && a <= 32) {
-            /*left corner bumpers*/
-            Serial.print("corner left");
-            Serial.println();
-            Serial.print("angle: ");
-            Serial.print(a);
-            Serial.println();
-            Serial.print("distance: ");
-            Serial.print(d);
-            Serial.println();
-            Serial.print("x: ");
-            Serial.print(x);
-            Serial.println();
-            Serial.print("y: ");
-            Serial.print(y);
-            Serial.println();
-            Serial.println();
-            digitalWrite(lf, HIGH);   // sets the bumper to be pressed
-            delay(10);
-            digitalWrite(ls, HIGH);   // sets the bumper to be pressed
-            delay(10);
-            digitalWrite(lf, LOW);   // sets the bumper to not pressed
-            delay(10);
-            digitalWrite(ls, LOW);   // sets the bumper to not pressed
-          }
-          else if (a >= 320 && a <= 326) {
-            /*right corner bumpers*/
-            Serial.print("corner right");
-            Serial.println();
-            Serial.print("angle: ");
-            Serial.print(a);
-            Serial.println();
-            Serial.print("distance: ");
-            Serial.print(d);
-            Serial.println();
-            Serial.print("x: ");
-            Serial.print(x);
-            Serial.println();
-            Serial.print("y: ");
-            Serial.print(y);
-            Serial.println();
-            Serial.println();
-            digitalWrite(rf, HIGH);   // sets the bumper to be pressed
-            delay(10);
-            digitalWrite(rs, HIGH);   // sets the bumper to be pressed
-            delay(10);
-            digitalWrite(rf, LOW);   // sets the bumper to not pres
-            delay(10);
-            digitalWrite(rs, LOW);   // sets the bumper to not pressed
-          }
+          Serial.println();
+          Serial.print("angle: ");
+          Serial.print(a);
+          Serial.println();
+          Serial.print("distance: ");
+          Serial.print(d);
+          Serial.println();
+          Serial.print("x: ");
+          Serial.print(x);
+          Serial.println();
+          Serial.print("y: ");
+          Serial.print(y);
+          Serial.println();
+          Serial.println();
+          digitalWrite(rs, HIGH);   // sets the bumper to be pressed
+          delay(10);
+          digitalWrite(rs, LOW);   // sets the bumper to not pressed
+        }
+        else if (a >= 343 || a <= 14) {
+          /*both front bumper*/
+          Serial.print("both front");
+          Serial.println();
+          Serial.print("angle: ");
+          Serial.print(a);
+          Serial.println();
+          Serial.print("distance: ");
+          Serial.print(d);
+          Serial.println();
+          Serial.print("x: ");
+          Serial.print(x);
+          Serial.println();
+          Serial.print("y: ");
+          Serial.print(y);
+          Serial.println();
+          Serial.println();
+          digitalWrite(rf, HIGH);   // sets the bumper to be pressed
+          delay(100);
+          digitalWrite(lf, HIGH);   // sets the bumper to be pressed
+          delay(100);
+          digitalWrite(rf, LOW);   // sets the bumper to not pressed
+          delay(10);
+          digitalWrite(lf, LOW);   // sets the bumper to not pressed
+
+          delay(10);
+
+        }
+        else if (a >= 28 && a <= 32) {
+          /*left corner bumpers*/
+          Serial.print("corner left");
+          Serial.println();
+          Serial.print("angle: ");
+          Serial.print(a);
+          Serial.println();
+          Serial.print("distance: ");
+          Serial.print(d);
+          Serial.println();
+          Serial.print("x: ");
+          Serial.print(x);
+          Serial.println();
+          Serial.print("y: ");
+          Serial.print(y);
+          Serial.println();
+          Serial.println();
+          digitalWrite(lf, HIGH);   // sets the bumper to be pressed
+          delay(10);
+          digitalWrite(ls, HIGH);   // sets the bumper to be pressed
+          delay(10);
+          digitalWrite(lf, LOW);   // sets the bumper to not pressed
+          delay(10);
+          digitalWrite(ls, LOW);   // sets the bumper to not pressed
+
+          delay(10);
+        }
+        else if (a >= 320 && a <= 326) {
+          /*right corner bumpers*/
+          Serial.print("corner right");
+          Serial.println();
+          Serial.print("angle: ");
+          Serial.print(a);
+          Serial.println();
+          Serial.print("distance: ");
+          Serial.print(d);
+          Serial.println();
+          Serial.print("x: ");
+          Serial.print(x);
+          Serial.println();
+          Serial.print("y: ");
+          Serial.print(y);
+          Serial.println();
+          Serial.println();
+          digitalWrite(rf, HIGH);   // sets the bumper to be pressed
+          delay(10);
+          digitalWrite(rs, HIGH);   // sets the bumper to be pressed
+          delay(10);
+          digitalWrite(rf, LOW);   // sets the bumper to not pres
+          delay(10);
+          digitalWrite(rs, LOW);   // sets the bumper to not pressed
+          delay(10);
+
+
         }
       }
     }
   }
 }
+
+
