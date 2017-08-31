@@ -1,5 +1,5 @@
-const int distance = 10;
-const float distanceFromCenterOfRotationTolazer = 2.5;
+#define distance 10
+#define distanceFromCenterOfRotationTolazer 2.5
 #include <Adafruit_NeoPixel.h>
 const float pi = 3.14159;
 
@@ -60,10 +60,10 @@ uint32_t defaultColor = royalBlue;
 uint32_t eyeColor = red;
 uint32_t errorColor = red;
 
-int ls = 8;
-int lf = 10;
-int rf = 11;
-int rs = 9;
+#define ls 8
+#define lf 10
+#define rf 11
+#define rs 9
 int d;
 int a;
 short  x, y, x2, y2;
@@ -327,9 +327,9 @@ void loop() {
       x = x2;
       y = y2;
 
-      if (y >= ((-1 / x) * 100) + (-168 - distance) && y <= (1 / x) * 100 + (168 + distance)) {
-        if (x >= 145 && x <= 245 + distance) {
-          if (a > 14 && a < 28) {
+      if (y >= ((-1 / x) * 100) + (-168 - distance + 3) && y <= (1 / x) * 100 + (168 + distance - 2)) {
+        if (x >= 150 && x <= 245 + distance) {
+          if (a > 14 && a < 29) {
             /*Left front bumper*/
             Serial.print("front left");
             Serial.println();
@@ -347,7 +347,7 @@ void loop() {
             Serial.println();
             Serial.println();
             digitalWrite(lf, HIGH);   // sets the bumper to be pressed
-            delay(10);
+            delay(5);
             digitalWrite(lf, LOW);   // sets the bumper to not pressed
           } else if ( a > 32 && a <= 90 ) {
             /*Side left bumper*/
@@ -367,9 +367,9 @@ void loop() {
             Serial.println();
             Serial.println();
             digitalWrite(ls, HIGH);   // sets the bumper to be pressed
-            delay(10);
+            delay(5);
             digitalWrite(ls, LOW);   // sets the bumper to not pressed
-          } else if (a > 326 && a < 343) {
+          } else if (a > 323 && a < 343) {
             Serial.print("front right");
 
             Serial.println();
@@ -388,9 +388,9 @@ void loop() {
             Serial.println();
             /*right front bumper*/
             digitalWrite(rf, HIGH);   // sets the bumper to be pressed
-            delay(10);
+            delay(5);
             digitalWrite(rf, LOW);   // sets the bumper to not pressed
-          } else if (a >= 270 && a < 320) {
+          } else if (a >= 270 && a < 321) {
             /*right side bumper*/
             Serial.print("right side");
 
@@ -409,7 +409,7 @@ void loop() {
             Serial.println();
             Serial.println();
             digitalWrite(rs, HIGH);   // sets the bumper to be pressed
-            delay(10);
+            delay(5);
             digitalWrite(rs, LOW);   // sets the bumper to not pressed
           }
           else if (a >= 343 || a <= 14) {
@@ -430,15 +430,15 @@ void loop() {
             Serial.println();
             Serial.println();
             digitalWrite(rf, HIGH);   // sets the bumper to be pressed
-            delay(10);
+            delay(5);
             digitalWrite(lf, HIGH);   // sets the bumper to be pressed
-            delay(10);
+            delay(5);
             digitalWrite(rf, LOW);   // sets the bumper to not pressed
-            delay(10);
+            delay(5);
             digitalWrite(lf, LOW);   // sets the bumper to not pressed
 
           }
-          else if (a >= 28 && a <= 32) {
+          else if (a >= 29 && a <= 32) {
             /*left corner bumpers*/
             Serial.print("corner left");
             Serial.println();
@@ -456,14 +456,14 @@ void loop() {
             Serial.println();
             Serial.println();
             digitalWrite(lf, HIGH);   // sets the bumper to be pressed
-            delay(10);
+            delay(5);
             digitalWrite(ls, HIGH);   // sets the bumper to be pressed
-            delay(10);
+            delay(5);
             digitalWrite(lf, LOW);   // sets the bumper to not pressed
-            delay(10);
+            delay(5);
             digitalWrite(ls, LOW);   // sets the bumper to not pressed
           }
-          else if (a >= 320 && a <= 326) {
+          else if (a >= 321 && a <= 323) {
             /*right corner bumpers*/
             Serial.print("corner right");
             Serial.println();
@@ -481,11 +481,11 @@ void loop() {
             Serial.println();
             Serial.println();
             digitalWrite(rf, HIGH);   // sets the bumper to be pressed
-            delay(10);
+            delay(5);
             digitalWrite(rs, HIGH);   // sets the bumper to be pressed
-            delay(10);
+            delay(5);
             digitalWrite(rf, LOW);   // sets the bumper to not pres
-            delay(10);
+            delay(5);
             digitalWrite(rs, LOW);   // sets the bumper to not pressed
           }
         }
