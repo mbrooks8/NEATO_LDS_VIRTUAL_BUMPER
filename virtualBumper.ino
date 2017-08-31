@@ -341,10 +341,10 @@ void loop() {
       x2 = tempcos * x - tempsin * y;
       y2 = tempsin * x + tempcos * y;
 
-      if (y2 >= ((-1 / x) * 100) + (-168 - distance + 1) &&
-          y2 <= (1 / x) * 100 + (168 + distance +2) &&
+      if (y2 >= ((-1 / x) * 100) + (-168 - distance + 2) &&
+          y2 <= (1 / x) * 100 + (168 + distance +1) &&
           x2 >= 150 &&
-          x2 <= 250 + distance) {
+          x2 <= 246   + distance) {
         if (a > 14 && a < 29) {
           /*Left front bumper*/
           Serial.print("front left");
